@@ -1,9 +1,11 @@
-#include "Grid_Graph.hpp"
-#include "batch.hpp"
-#include "netlist.hpp"
+#include "Net.hpp"
+#include "Netlist.hpp"
+#ifndef MY_INCLUDES_H
 #include "main.hpp"
-#include "struct.hpp"
-#include <omp.h>
+#endif
+#include "Grid_Graph.hpp"
+#include "Gamer.hpp"
+
 
 /*
 Improvements possible-
@@ -41,16 +43,17 @@ int main(int argc, char *argv[]) {
     int NUM_THREADS = atoi(argv[5]);
     
     Grid_Graph G(capfilename);
-    GAMER GAMER(G.M,G.N,G.L);
     std::cout << "Grid graph successfully made" << std::endl;
-    Netlist Netlist(G,netfilename,GAMER);
+    GAMER gamer(G.M,G.N,G.L);
+    std::cout << "GAMER initialized " << std::endl;
+    Netlist Netlist(G,netfilename,gamer);
     std::cout << "Netlist successfully made" << std::endl;
     double T__ = omp_get_wtime();
-    Netlist.mazer(G,GAMER);
+    Netlist.mazer(G,gamer);
     double T___ = omp_get_wtime();
     std::cerr << "Maze routing takes  " << T___ -T__  << " seconds" << std::endl; 
     // Store the result
-    Netlist.PR_output(outfilename)
+    Netlist.PR_output(outfilename);
     std:: cerr << "succesfully stored to file " << std::endl;
     return 0;
 }
